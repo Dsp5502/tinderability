@@ -5,8 +5,6 @@ const username = process.env.POSTGRES_USER;
 const password = process.env.POSTGRES_PASSWORD;
 const host = process.env.POSTGRES_HOST;
 
-console.log(database, username, password, host);
-
 const sequelize = new Sequelize(database, username, password, {
   host,
   dialect: 'postgres',
