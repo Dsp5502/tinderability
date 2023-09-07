@@ -76,25 +76,33 @@ const createUser = async (req, res) => {
  */
 const updateUser = async (req, res) => {
   const userId = req.params.id;
+  const { first_name, last_name, email, phone_number } = req.body;
 
   try {
-    const { first_name, last_name, email, phone_number } = req.body;
+    const [updatedCount] = await userModel.update(
+      {
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        updated_at: new Date(),
+      },
+      {
+        where: { user_id: userId },
+      }
+    );
 
-    await existingUser.update({
-      first_name,
-      last_name,
-      email,
-      phone_number,
-      updated_at: new Date(),
-    });
+    if (updatedCount === 0) {
+      handleHttpError(res, 'USER_NOT_FOUND', 404);
+      return;
+    }
 
     const updatedUser = await userModel.findByPk(userId, {
       attributes: {
         exclude: ['password_hash'],
       },
     });
-
-    res.status(200).json(updatedUser);
+    return res.status(200).json(updatedUser);
   } catch (error) {
     console.error('ERROR_UPDATE_USER:', error);
     handleHttpError(res, 'ERROR_UPDATE_USER', 500);

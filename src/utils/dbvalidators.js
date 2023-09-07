@@ -1,7 +1,7 @@
-const { userModel } = require('../models');
+const { userModel, skillModel } = require('../models');
 
 const emailExists = async (email = '') => {
-  const existsEmail = await userModel.findOne({ email });
+  const existsEmail = await userModel.findOne({ where: { email } });
   if (existsEmail) {
     throw new Error(`The email: ${email}, is already registered`);
   }
@@ -14,7 +14,15 @@ const existUserById = async (id) => {
   }
 };
 
+const existSkillById = async (id) => {
+  const existSkill = await skillModel.findByPk(id);
+  if (!existSkill) {
+    throw new Error(`The skill with id: ${id} does not exist`);
+  }
+};
+
 module.exports = {
   emailExists,
   existUserById,
+  existSkillById,
 };

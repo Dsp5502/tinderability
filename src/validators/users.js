@@ -1,5 +1,6 @@
 const { check } = require('express-validator');
 const { validateResults, emailExists, existUserById } = require('../utils');
+
 const validatorCreateUser = [
   check('first_name', 'El nombre es obligatorio')
     .notEmpty()
@@ -38,8 +39,7 @@ const validatorUpdateUser = [
   check('email', 'El correo electrónico es obligatorio')
     .notEmpty()
     .isEmail()
-    .withMessage('El correo electrónico no es válido')
-    .custom(emailExists),
+    .withMessage('El correo electrónico no es válido'),
   check('phone_number')
     .optional()
     .isString()
